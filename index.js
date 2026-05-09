@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 const app = express();
 
@@ -35,6 +35,17 @@ async function run() {
       const cursor = myColl.find();
       const result = await cursor.toArray();
       res.send(result);
+    });
+
+    //create api for dynamic clicked user id route
+    app.get("/users/:id", async (req, res) => {
+      const id = req.params.id;
+
+      const query = {
+        _id: new ObjectId(id),
+      };
+      const user = await myColl.findOne(query);
+      res.send(user);
     });
 
     // Send a ping to confirm a successful connection
